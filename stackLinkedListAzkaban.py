@@ -1,7 +1,7 @@
 # Monk and Prisoner of Azkaban
 
 # Monk's wizard friend Harry Potter is 
-# # excited to see his Dad fight Dementors 
+# excited to see his Dad fight Dementors 
 # and rescue him and his Godfather Sirius 
 # Black. Meanwhile their friend Hermoine 
 # is stuck on some silly arrays problem. 
@@ -9,27 +9,18 @@
 # so he asked Monk to solve that problem 
 # for Hermoine, so that they can go.
 
-# The problem is given an array A
-# having N integers, for each i (1<i<N)
-# find x + y, where x is the largest number
-# less than i such that A[x] > A[i] and y
-# is the smallest number greater than i
-# such that A[y] > A[i]. If there is
-# no x < i such that A[x] > A[i] then
-# take x = -1. Similarly, if there is no
-# y > i such that A[y] > A[i], then take
-# y = -1
-
-# https://www.hackerearth.com/practice/data-structures/stacks/basics-of-stacks/practice-problems/algorithm/monk-and-prisoner-of-azkaban/
+# Node and Stack classes
 
 class Node:
     def __init__(self, value=None):
         self.next = None
+        self.prev = None
         self.value = value
 
 class Stack:
     def __init__(self):
         self.head = None
+        self.tail = None
         self.count = 0
 
     def peek(self):
@@ -48,14 +39,19 @@ class Stack:
         self.head = None
         if temp != None:
             self.head = temp.next
+            self.head.prev = None
+        else:
+            self.tail = None
         self.count -= 1
 
-    def addFirst(self, node):
+    def addFirst(self, value):
         if self.head == None:
-            self.head = node
+            self.head = Node(value)
+            self.tail = Node(value)
         else:
             temp = self.head
-            self.head = node
+            self.head = Node(value)
+            temp.prev = self.head
             self.head.next = temp
         self.count += 1
         
@@ -71,10 +67,40 @@ class Stack:
                 print(currentNode.value)
                 currentNode = currentNode.next
             print(currentNode.value)
-        
-a[n]
-biggestNumber = Stack()
-smallestNumber = Stack()
-for index in a:
-    for possibleBigNumber in range(a.length - index):
-    for possibleSmallNumber in a:
+
+index = 0
+stackA = Stack()
+stackA.addFirst(5)
+stackA.addFirst(4)
+stackA.addFirst(1)
+stackA.addFirst(3)
+stackA.addFirst(2)
+currentIndex = 1
+currentNode = stackA.head
+while currentNode != None:
+    originVal = currentNode.value
+    xVal = currentNode.value
+    yVal = currentNode.value
+    if currentIndex != 1:
+        xNode = currentNode.prev
+        while xNode != None:
+            if xVal < xNode.value:
+                xVal = xNode.value
+            xNode = xNode.prev
+    if currentIndex == stackA.count:
+        yVal = -1
+    else:
+        yNode = currentNode.next
+        while yNode != None:
+            if yVal < yNode.value:
+                yVal = yNode.value
+            yNode = yNode.next
+    if xVal == originVal:
+        xVal = -1
+    if yVal == originVal:
+        yVal = -1
+    print(xVal + yVal)
+    currentNode = currentNode.next
+    currentIndex += 1
+            
+
